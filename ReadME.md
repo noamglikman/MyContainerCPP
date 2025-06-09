@@ -17,6 +17,16 @@ The project uses a standard `Makefile`. Run the following commands from the proj
 
 The `MyContainer` class is a dynamic container supporting any comparable type.
 
+## Class: TestObject
+
+the `TestObject`  A new object that can be compared to check that the iterators are working on a generic object.
+Result when running the demo: 
+Ascending order: (1,one) (2,two) (6,six) (7,seven) (15,fifteen) 
+Descending order: (15,fifteen) (7,seven) (6,six) (2,two) (1,one) 
+Side cross order: (1,one) (15,fifteen) (2,two) (7,seven) (6,six) 
+Reverse order: (2,two) (1,one) (6,six) (15,fifteen) (7,seven) 
+Middle out order: (6,six) (15,fifteen) (1,one) (7,seven) (2,two) 
+
 ### Key Methods:
 - `void add(const T& element)` — Add an element to the container.
 - `void remove(const T& element)` — Remove **all** occurrences of an element. Throws an exception if not found.
@@ -43,10 +53,13 @@ Each iterator supports `begin()` and `end()` methods and overloads `*`, `++`, `=
 │   ├── Order.hpp
 │   ├── ReverseOrder.hpp
 │   ├── SideCrossOrder.hpp
+│   ├── TestObject.hpp
 │   └── doctest.h
 ├── OBJ
+│   ├── demo.o
 │   └── tests.o
 ├── ReadME.md
+├── demo
 ├── demo.cpp
 ├── makefile
 ├── tests

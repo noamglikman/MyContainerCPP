@@ -329,6 +329,43 @@ TEST_CASE("MiddleOutOrderIterator works with strings") {
     CHECK(results == expected);
 }
 
+TEST_CASE("even number of elements in MiddleOutOrderIterator") {
+    MyContainer<int> c;
+    c.add(1);
+    c.add(2);
+    c.add(3);
+    c.add(4);
+
+    auto it = c.begin_middle_out_order();
+    auto end = c.end_middle_out_order();
+
+    std::vector<int> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+    
+    std::vector<int> expected = {3, 2, 4, 1};
+    CHECK(results == expected);
+}
+TEST_CASE("odd number of elements in MiddleOutOrderIterator") {
+    MyContainer<int> c;
+    c.add(1);
+    c.add(2);
+    c.add(3);
+
+    auto it = c.begin_middle_out_order();
+    auto end = c.end_middle_out_order();
+
+    std::vector<int> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+    
+    std::vector<int> expected = {2,1,3};
+    CHECK(results == expected);
+}
 
 
 
