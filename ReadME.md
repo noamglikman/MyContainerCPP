@@ -85,7 +85,7 @@ The project uses [doctest]
 - All member functions of `MyContainer`
 - Edge cases (e.g., removing non-existing elements)
 - All iterators and their traversal logic
-## list of all test
+## list of part of the tests
 
 MyContainer Tests
 
