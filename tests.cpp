@@ -1179,5 +1179,103 @@ TEST_CASE("TestObject OrderIterator with strings") {
     std::vector<TestObject> expected = {TestObject(3, "banana"), TestObject(1, "apple"), TestObject(2, "cherry")};
     CHECK(results == expected);
 }
+// tests for TestObject with MiddleIterator
+TEST_CASE("TestObject MiddleIterator") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(7, "seven"));
+    container.add(TestObject(15, "fifteen"));
+    container.add(TestObject(6, "six"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(2, "two"));
+
+    auto it = container.begin_middle_out_order();
+    auto end = container.end_middle_out_order();
+
+    std::vector<TestObject> results;
+    for (; it != end; ++it) {
+        results.push_back(*it);
+    }
+
+    std::vector<TestObject> expected = {TestObject(6, "six"), TestObject(15, "fifteen"), TestObject(1, "one"), TestObject(7, "seven"), TestObject(2, "two")};
+    CHECK(results == expected);
+}
+// tests for TestObject with empty container
+TEST_CASE("TestObject MiddleIterator with empty container") {
+    MyContainer<TestObject> container;
+    auto it = container.begin_middle_out_order();
+    auto end = container.end_middle_out_order();
+
+    CHECK(it == end); 
+}
+// tests for TestObject with single element
+TEST_CASE("TestObject MiddleIterator with single element") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(42, "forty-two"));
+
+    auto it = container.begin_middle_out_order();
+    auto end = container.end_middle_out_order();
+
+    CHECK(it != end);
+    CHECK(*it == TestObject(42, "forty-two"));
+
+    ++it;
+    CHECK(it == end);
+}
+// tests for TestObject with duplicate elements
+TEST_CASE("TestObject MiddleIterator with duplicate elements") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(2, "two"));
+    container.add(TestObject(1, "one"));
+
+    std::vector<TestObject> expected = {TestObject(3, "three"), TestObject(1, "one"), TestObject(2, "two"), TestObject(3, "three"), TestObject(1, "one")};
+
+    std::vector<TestObject> result;
+    for (auto it = container.begin_middle_out_order(); it != container.end_middle_out_order(); ++it) {
+        result.push_back(*it);
+    }
+
+    CHECK(result == expected);
+}
+// tests for TestObject with double values
+TEST_CASE("TestObject MiddleIterator with double values") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3.14, "pi"));
+    container.add(TestObject(2.71, "e"));
+    container.add(TestObject(1.41, "sqrt2"));
+
+    auto it = container.begin_middle_out_order();
+    auto end = container.end_middle_out_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(2.71, "e"), TestObject(3.14, "pi"), TestObject(1.41, "sqrt2")};
+    CHECK(results == expected);
+}
+// tests for TestObject with strings
+TEST_CASE("TestObject MiddleIterator with strings") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "banana"));
+    container.add(TestObject(1, "apple"));
+    container.add(TestObject(2, "cherry"));
+
+    auto it = container.begin_middle_out_order();
+    auto end = container.end_middle_out_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(1, "apple"), TestObject(3, "banana"), TestObject(2, "cherry")};
+    CHECK(results == expected);
+}
 
 
