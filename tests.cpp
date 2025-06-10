@@ -7,6 +7,7 @@
 #include "Order.hpp"
 #include "ReverseOrder.hpp"
 #include "SideCrossOrder.hpp"
+#include "TestObject.hpp"
 #include <exception>
 #include <iostream>
 #include <stdexcept>
@@ -686,3 +687,497 @@ TEST_CASE("SideCross with strings") {
     std::vector<std::string> expected = {"apple", "cherry","banana"};
     CHECK(result == expected);
 }
+// tests for SideCrossOrder with TestObject
+TEST_CASE("TestObject SideCrossOrder") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(7, "seven"));
+    container.add(TestObject(15, "fifteen"));
+    container.add(TestObject(6, "six"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(2, "two"));
+
+    auto it = container.begin_side_cross_order();
+    auto end = container.end_side_cross_order();
+
+    std::vector<TestObject> results;
+    for (; it != end; ++it) {
+        results.push_back(*it);
+    }
+
+    std::vector<TestObject> expected = {TestObject(1, "one"), TestObject(15, "fifteen"), TestObject(2, "two"), TestObject(7, "seven"), TestObject(6, "six")};
+    CHECK(results == expected);
+}
+TEST_CASE("TestObject SideCrossOrder with empty container") {
+    MyContainer<TestObject> container;
+    auto it = container.begin_side_cross_order();
+    auto end = container.end_side_cross_order();
+
+    CHECK(it == end); 
+}
+// tests for SideCrossOrder with single TestObject element
+TEST_CASE("TestObject SideCrossOrder with single element") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(42, "forty-two"));
+
+    auto it = container.begin_side_cross_order();
+    auto end = container.end_side_cross_order();
+
+    CHECK(it != end);
+    CHECK(*it == TestObject(42, "forty-two"));
+
+    ++it;
+    CHECK(it == end);
+}
+// tests for SideCrossOrder with duplicate TestObject elements  
+TEST_CASE("TestObject SideCrossOrder with duplicate elements") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(2, "two"));
+    container.add(TestObject(1, "one"));
+
+    std::vector<TestObject> expected = {TestObject(1, "one"), TestObject(3, "three"), TestObject(1, "one"), TestObject(3, "three"), TestObject(2, "two")};
+
+    std::vector<TestObject> result;
+    for (auto it = container.begin_side_cross_order(); it != container.end_side_cross_order(); ++it) {
+        result.push_back(*it);
+    }
+
+    CHECK(result == expected);
+}
+TEST_CASE("TestObject ascending order ")
+{
+    MyContainer<TestObject> container;
+    container.add(TestObject(7, "seven"));
+    container.add(TestObject(15, "fifteen"));
+    container.add(TestObject(6, "six"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(2, "two"));
+
+    auto it = container.begin_ascending_order();
+    auto end = container.end_ascending_order();
+
+    std::vector<TestObject> results;
+    for (; it != end; ++it) {
+        results.push_back(*it);
+    }
+
+    std::vector<TestObject> expected = {TestObject(1, "one"), TestObject(2, "two"), TestObject(6, "six"), TestObject(7, "seven"), TestObject(15, "fifteen")};
+    CHECK(results == expected);
+}
+// tests for TestObject with empty container
+TEST_CASE("TestObject ascending order with empty container") {
+    MyContainer<TestObject> container;
+    auto it = container.begin_ascending_order();
+    auto end = container.end_ascending_order();
+
+    CHECK(it == end); 
+}
+// tests for TestObject with single element
+TEST_CASE("TestObject ascending order with single element") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(42, "forty-two"));
+
+    auto it = container.begin_ascending_order();
+    auto end = container.end_ascending_order();
+
+    CHECK(it != end);
+    CHECK(*it == TestObject(42, "forty-two"));
+
+    ++it;
+    CHECK(it == end);
+}
+// tests for TestObject with duplicate elements
+TEST_CASE("TestObject ascending order with duplicate elements") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(2, "two"));
+    container.add(TestObject(1, "one"));
+
+    std::vector<TestObject> expected = {TestObject(1, "one"), TestObject(1, "one"), TestObject(2, "two"), TestObject(3, "three"), TestObject(3, "three")};
+
+    std::vector<TestObject> result;
+    for (auto it = container.begin_ascending_order(); it != container.end_ascending_order(); ++it) {
+        result.push_back(*it);
+    }
+
+    CHECK(result == expected);
+}
+// tests for TestObject with double values
+TEST_CASE("TestObject ascending order with double values") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3.14, "pi"));
+    container.add(TestObject(2.71, "e"));
+    container.add(TestObject(1.41, "sqrt2"));
+
+    auto it = container.begin_ascending_order();
+    auto end = container.end_ascending_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(1.41, "sqrt2"), TestObject(2.71, "e"), TestObject(3.14, "pi")};
+    CHECK(results == expected);
+}
+TEST_CASE("TestObject descending order ")
+{
+    MyContainer<TestObject> container;
+    container.add(TestObject(7, "seven"));
+    container.add(TestObject(15, "fifteen"));
+    container.add(TestObject(6, "six"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(2, "two"));
+
+    auto it = container.begin_descending_order();
+    auto end = container.end_descending_order();
+
+    std::vector<TestObject> results;
+    for (; it != end; ++it) {
+        results.push_back(*it);
+    }
+
+    std::vector<TestObject> expected = {TestObject(15, "fifteen"), TestObject(7, "seven"), TestObject(6, "six"), TestObject(2, "two"), TestObject(1, "one")};
+    CHECK(results == expected);
+}
+// tests for TestObject with empty container
+TEST_CASE("TestObject descending order with empty container") {
+    MyContainer<TestObject> container;
+    auto it = container.begin_descending_order();
+    auto end = container.end_descending_order();
+
+    CHECK(it == end); 
+}
+// tests for TestObject with single element
+TEST_CASE("TestObject descending order with single element") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(42, "forty-two"));
+
+    auto it = container.begin_descending_order();
+    auto end = container.end_descending_order();
+
+    CHECK(it != end);
+    CHECK(*it == TestObject(42, "forty-two"));
+
+    ++it;
+    CHECK(it == end);
+}
+// tests for TestObject with duplicate elements
+TEST_CASE("TestObject descending order with duplicate elements") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(2, "two"));
+    container.add(TestObject(1, "one"));
+
+    std::vector<TestObject> expected = {TestObject(3, "three"), TestObject(3, "three"), TestObject(2, "two"), TestObject(1, "one"), TestObject(1, "one")};
+
+    std::vector<TestObject> result;
+    for (auto it = container.begin_descending_order(); it != container.end_descending_order(); ++it) {
+        result.push_back(*it);
+    }
+
+    CHECK(result == expected);
+}
+// tests for TestObject with double values
+TEST_CASE("TestObject descending order with double values") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3.14, "pi"));
+    container.add(TestObject(2.71, "e"));
+    container.add(TestObject(1.41, "sqrt2"));
+
+    auto it = container.begin_descending_order();
+    auto end = container.end_descending_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(3.14, "pi"), TestObject(2.71, "e"), TestObject(1.41, "sqrt2")};
+    CHECK(results == expected);
+}
+// tests for TestObject with strings
+TEST_CASE("TestObject descending order with strings") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "banana"));
+    container.add(TestObject(1, "apple"));
+    container.add(TestObject(2, "cherry"));
+
+    auto it = container.begin_descending_order();
+    auto end = container.end_descending_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(3, "banana"), TestObject(2, "cherry"), TestObject(1, "apple")};
+    CHECK(results == expected);
+}
+TEST_CASE("TestObject reverse order ")
+{
+    MyContainer<TestObject> container;
+    container.add(TestObject(7, "seven"));
+    container.add(TestObject(15, "fifteen"));
+    container.add(TestObject(6, "six"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(2, "two"));
+
+    auto it = container.begin_reverse_order();
+    auto end = container.end_reverse_order();
+
+    std::vector<TestObject> results;
+    for (; it != end; ++it) {
+        results.push_back(*it);
+    }
+
+    std::vector<TestObject> expected = {TestObject(2, "two"), TestObject(1, "one"), TestObject(6, "six"), TestObject(15, "fifteen"), TestObject(7, "seven")};
+    CHECK(results == expected);
+}
+// tests for TestObject with empty container
+TEST_CASE("TestObject reverse order with empty container") {
+    MyContainer<TestObject> container;
+    auto it = container.begin_reverse_order();
+    auto end = container.end_reverse_order();
+
+    CHECK(it == end); 
+}
+// tests for TestObject with single element
+TEST_CASE("TestObject reverse order with single element") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(42, "forty-two"));
+
+    auto it = container.begin_reverse_order();
+    auto end = container.end_reverse_order();
+
+    CHECK(it != end);
+    CHECK(*it == TestObject(42, "forty-two"));
+
+    ++it;
+    CHECK(it == end);
+}
+// tests for TestObject with duplicate elements
+TEST_CASE("TestObject reverse order with duplicate elements") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(2, "two"));
+    container.add(TestObject(1, "one"));
+
+    std::vector<TestObject> expected = {TestObject(1, "one"), TestObject(2, "two"), TestObject(3, "three"), TestObject(1, "one"), TestObject(3, "three")};
+
+    std::vector<TestObject> result;
+    for (auto it = container.begin_reverse_order(); it != container.end_reverse_order(); ++it) {
+        result.push_back(*it);
+    }
+
+    CHECK(result == expected);
+}
+// tests for TestObject with double values
+TEST_CASE("TestObject reverse order with double values") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3.14, "pi"));
+    container.add(TestObject(2.71, "e"));
+    container.add(TestObject(1.41, "sqrt2"));
+
+    auto it = container.begin_reverse_order();
+    auto end = container.end_reverse_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(1.41, "sqrt2"), TestObject(2.71, "e"), TestObject(3.14, "pi")};
+    CHECK(results == expected);
+}
+// tests for TestObject with SideCrossOrder
+TEST_CASE("TestObject SideCrossOrder with TestObject") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(7, "seven"));
+    container.add(TestObject(15, "fifteen"));
+    container.add(TestObject(6, "six"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(2, "two"));
+
+    auto it = container.begin_side_cross_order();
+    auto end = container.end_side_cross_order();
+
+    std::vector<TestObject> results;
+    for (; it != end; ++it) {
+        results.push_back(*it);
+    }
+
+    std::vector<TestObject> expected = {TestObject(1, "one"), TestObject(15, "fifteen"), TestObject(2, "two"), TestObject(7, "seven"), TestObject(6, "six")};
+    CHECK(results == expected);
+}
+// tests for TestObject with empty container
+TEST_CASE("TestObject SideCrossOrder with empty container") {
+    MyContainer<TestObject> container;
+    auto it = container.begin_side_cross_order();
+    auto end = container.end_side_cross_order();
+
+    CHECK(it == end); 
+}
+// tests for TestObject with single element
+TEST_CASE("TestObject SideCrossOrder with single element") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(42, "forty-two"));
+
+    auto it = container.begin_side_cross_order();
+    auto end = container.end_side_cross_order();
+
+    CHECK(it != end);
+    CHECK(*it == TestObject(42, "forty-two"));
+
+    ++it;
+    CHECK(it == end);
+}
+// tests for TestObject with duplicate elements 
+TEST_CASE("TestObject SideCrossOrder with duplicate elements") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(2, "two"));
+    container.add(TestObject(1, "one"));
+
+    std::vector<TestObject> expected = {TestObject(1, "one"), TestObject(3, "three"), TestObject(1, "one"), TestObject(3, "three"), TestObject(2, "two")};
+
+    std::vector<TestObject> result;
+    for (auto it = container.begin_side_cross_order(); it != container.end_side_cross_order(); ++it) {
+        result.push_back(*it);
+    }
+
+    CHECK(result == expected);
+}
+// tests for TestObject with double values
+TEST_CASE("TestObject SideCrossOrder with double values") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3.14, "pi"));
+    container.add(TestObject(2.71, "e"));
+    container.add(TestObject(1.41, "sqrt2"));
+
+    auto it = container.begin_side_cross_order();
+    auto end = container.end_side_cross_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(1.41, "sqrt2"), TestObject(3.14, "pi"), TestObject(2.71, "e")};
+    CHECK(results == expected);
+}
+// tests for TestObject with OrderIterator
+TEST_CASE("TestObject OrderIterator") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(7, "seven"));
+    container.add(TestObject(15, "fifteen"));
+    container.add(TestObject(6, "six"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(2, "two"));
+
+    auto it = container.begin_order();
+    auto end = container.end_order();
+
+    std::vector<TestObject> results;
+    for (; it != end; ++it) {
+        results.push_back(*it);
+    }
+
+    std::vector<TestObject> expected = {TestObject(7, "seven"), TestObject(15, "fifteen"), TestObject(6, "six"), TestObject(1, "one"), TestObject(2, "two")};
+    CHECK(results == expected);
+}
+// tests for TestObject with empty container
+TEST_CASE("TestObject OrderIterator with empty container") {
+    MyContainer<TestObject> container;
+    auto it = container.begin_order();
+    auto end = container.end_order();
+
+    CHECK(it == end); 
+}
+// tests for TestObject with single element
+TEST_CASE("TestObject OrderIterator with single element") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(42, "forty-two"));
+
+    auto it = container.begin_order();
+    auto end = container.end_order();
+
+    CHECK(it != end);
+    CHECK(*it == TestObject(42, "forty-two"));
+
+    ++it;
+    CHECK(it == end);
+}
+// tests for TestObject with duplicate elements
+TEST_CASE("TestObject OrderIterator with duplicate elements") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(1, "one"));
+    container.add(TestObject(3, "three"));
+    container.add(TestObject(2, "two"));
+    container.add(TestObject(1, "one"));
+
+    std::vector<TestObject> expected = {TestObject(3, "three"), TestObject(1, "one"), TestObject(3, "three"), TestObject(2, "two"), TestObject(1, "one")};
+
+    std::vector<TestObject> result;
+    for (auto it = container.begin_order(); it != container.end_order(); ++it) {
+        result.push_back(*it);
+    }
+
+    CHECK(result == expected);
+}
+// tests for TestObject with double values
+TEST_CASE("TestObject OrderIterator with double values") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3.14, "pi"));
+    container.add(TestObject(2.71, "e"));
+    container.add(TestObject(1.41, "sqrt2"));
+
+    auto it = container.begin_order();
+    auto end = container.end_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(3.14, "pi"), TestObject(2.71, "e"), TestObject(1.41, "sqrt2")};
+    CHECK(results == expected);
+}   
+// tests for TestObject with strings
+TEST_CASE("TestObject OrderIterator with strings") {
+    MyContainer<TestObject> container;
+    container.add(TestObject(3, "banana"));
+    container.add(TestObject(1, "apple"));
+    container.add(TestObject(2, "cherry"));
+
+    auto it = container.begin_order();
+    auto end = container.end_order();
+
+    std::vector<TestObject> results;
+    while (it != end) {
+        results.push_back(*it);
+        ++it;
+    }
+
+    std::vector<TestObject> expected = {TestObject(3, "banana"), TestObject(1, "apple"), TestObject(2, "cherry")};
+    CHECK(results == expected);
+}
+
+

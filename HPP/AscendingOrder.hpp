@@ -46,9 +46,12 @@ public:
      * @return Reference to the updated iterator.
      */
     AscendingIterator& operator++() {
-        ++index;
-        return *this;
+    if (index >= sortedData.size()) {
+        throw std::out_of_range("Iterator increment beyond container bounds");
     }
+    ++index;
+    return *this;
+    }   
 
     /**
      * @brief Inequality operator to compare two iterators.

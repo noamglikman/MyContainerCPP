@@ -67,7 +67,7 @@ int main() {
         std::cout << *it << ' ';
     }
     std::cout << std::endl;
-
+    
     std::cout << "Side cross order: ";
     for (auto it = TestObjectContainer.begin_side_cross_order(); it != TestObjectContainer.end_side_cross_order(); ++it) {
         std::cout << *it << ' ';
